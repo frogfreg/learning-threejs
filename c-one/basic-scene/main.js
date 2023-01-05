@@ -1,6 +1,5 @@
 import * as THREE from "three";
-
-import gsap from "gsap";
+import "./styles.css";
 
 const scene = new THREE.Scene();
 
@@ -15,9 +14,13 @@ const axesHelper = new THREE.AxesHelper(3);
 
 scene.add(axesHelper);
 
-const sizes = { width: 800, height: 600 };
+const sizes = {
+    width: 800,
+    height: 600,
+};
 
-const camera = new THREE.PerspectiveCamera(80, sizes.width / sizes.height);
+// const camera = new THREE.PerspectiveCamera(80, sizes.width / sizes.height);
+const camera = new THREE.OrthographicCamera(-1, 1, -1, 1, 0.1, 100);
 
 camera.position.z = 3;
 
@@ -31,19 +34,15 @@ renderer.setSize(sizes.width, sizes.height);
 
 // Animations
 
-// const clock = new THREE.Clock();
-
-gsap.to(cube.position, { x: 2, duration: 1, delay: 1 });
-gsap.to(cube.position, { x: 0, duration: 1, delay: 2 });
+const clock = new THREE.Clock();
 
 function tick() {
+    const elapsedTime = clock.getElapsedTime();
+
     renderer.render(scene, camera);
 
-    // cube.rotation.y = 2 * Math.PI * elapsedTime;
-    // cube.position.y = Math.sin(elapsedTime);
-    // cube.position.x = Math.cos(elapsedTime);
+    cube.rotation.y = Math.PI * elapsedTime;
 
-    // cube.position.x = elapsedTime * 0.5;
     camera.lookAt(cube.position);
 
     requestAnimationFrame(tick);
