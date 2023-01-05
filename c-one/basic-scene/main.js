@@ -1,32 +1,15 @@
 import * as THREE from "three";
 
+import gsap from "gsap";
+
 const scene = new THREE.Scene();
 
-const group = new THREE.Group();
-scene.add(group);
-
-const cube1 = new THREE.Mesh(
+const cube = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: "#DBF227" })
-);
-const cube2 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: "#042940" })
-);
-const cube3 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: "#042940" })
+    new THREE.MeshBasicMaterial({ color: "#FF4858" })
 );
 
-cube1.position.set(0, 0, 1);
-cube2.position.set(-2, 0, -1);
-cube3.position.set(2, 0, -1);
-
-group.add(cube1);
-group.add(cube2);
-group.add(cube3);
-
-group.scale.set(0.5, 0.5, 0.5);
+scene.add(cube);
 
 const axesHelper = new THREE.AxesHelper(3);
 
@@ -37,9 +20,6 @@ const sizes = { width: 800, height: 600 };
 const camera = new THREE.PerspectiveCamera(80, sizes.width / sizes.height);
 
 camera.position.z = 3;
-camera.position.y = 1.5;
-
-camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 scene.add(camera);
 
@@ -49,4 +29,24 @@ const renderer = new THREE.WebGLRenderer({ canvas });
 
 renderer.setSize(sizes.width, sizes.height);
 
-renderer.render(scene, camera);
+// Animations
+
+// const clock = new THREE.Clock();
+
+gsap.to(cube.position, { x: 2, duration: 1, delay: 1 });
+gsap.to(cube.position, { x: 0, duration: 1, delay: 2 });
+
+function tick() {
+    renderer.render(scene, camera);
+
+    // cube.rotation.y = 2 * Math.PI * elapsedTime;
+    // cube.position.y = Math.sin(elapsedTime);
+    // cube.position.x = Math.cos(elapsedTime);
+
+    // cube.position.x = elapsedTime * 0.5;
+    camera.lookAt(cube.position);
+
+    requestAnimationFrame(tick);
+}
+
+tick();
