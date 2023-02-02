@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import "./styles.css";
 
-import { OrbitControls } from "three/addons/controls/OrbitControls";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const cursor = {
     x: 0,
@@ -9,15 +9,13 @@ const cursor = {
 };
 
 const sizes = {
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
 };
 
 window.addEventListener("mousemove", (event) => {
     cursor.x = event.clientX / sizes.width - 0.5;
     cursor.y = event.clientY / sizes.height - 0.5;
-
-    console.log(cursor);
 });
 
 const scene = new THREE.Scene();
@@ -34,7 +32,6 @@ const axesHelper = new THREE.AxesHelper(3);
 scene.add(axesHelper);
 
 const camera = new THREE.PerspectiveCamera(80, sizes.width / sizes.height);
-// const camera = new THREE.OrthographicCamera(-1, 1, -1, 1, 0.1, 100);
 
 camera.position.z = 3;
 
@@ -49,23 +46,33 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
 renderer.setSize(sizes.width, sizes.height);
+renderer.render(scene, camera);
 
-// Animations
+renderer.setPixelRatio(window.devicePixelRatio);
 
-// const clock = new THREE.Clock();
+window.addEventListener("resize", () => {
+
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    camera.aspect = sizes.width / sizes.height;
+
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+});
+
+window.addEventListener("dblclick", () => {
+    if (!document.fullscreenElement) {
+        canvas.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+});
 
 function tick() {
-    // const elapsedTime = clock.getElapsedTime();
-
     renderer.render(scene, camera);
-
-    // cube.rotation.y = Math.PI * elapsedTime;1
-
-    // camera.position.x = Math.sin(cursor.x * 2 * Math.PI) * 3;
-    // camera.position.z = Math.cos(cursor.x * 2 * Math.PI) * 3;
-
-    // camera.lookAt(cube.position);
-
     controls.update();
 
     requestAnimationFrame(tick);
