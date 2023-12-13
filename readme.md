@@ -1,3 +1,1 @@
-# Learning three.js
-
-I will put here the code generated while following the threejs journey course by bruno simon
+# This is the repo I use to learn three js. For real this time. Or so I hope
