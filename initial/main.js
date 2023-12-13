@@ -1,1 +1,3 @@
-console.log("Hello there!!!!!")
+import * as THREE from "three";
+
+console.log(THREE)
