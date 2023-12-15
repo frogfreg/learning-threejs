@@ -2,14 +2,16 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 // import gsap from "gsap";
 
+console.log("the device pixel ratio is: ", window.devicePixelRatio);
+
 const cursor = {
   x: 0,
   y: 0,
 };
 
 const sizes = {
-  width: 800,
-  height: 600,
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
 
 const canvas = document.querySelector(".webgl");
@@ -63,8 +65,24 @@ window.addEventListener("mousemove", (event) => {
   camera.lookAt(cube1.position);
 });
 
+window.addEventListener("resize", () => {
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(sizes.width, sizes.height);
+
+  console.log("window resized!");
+});
+
+window.addEventListener("dblclick", () => {
+  canvas.requestFullscreen();
+});
+
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 // const clock = new THREE.Clock();
 

@@ -127,3 +127,15 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+.webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+
+html,
+body {
+  overflow: hidden;
+}
