@@ -17,10 +17,24 @@ const sizes = {
 const canvas = document.querySelector(".webgl");
 const scene = new THREE.Scene();
 
-const cube1 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: "red" })
-);
+const positionArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);
+
+const positionsAttribute = new THREE.BufferAttribute(positionArray, 3);
+
+const someGeometry = new THREE.BufferGeometry();
+const someMaterial = new THREE.MeshBasicMaterial({
+  color: "red",
+  wireframe: true,
+});
+someGeometry.setAttribute("position", positionsAttribute);
+
+const someMesh = new THREE.Mesh(someGeometry, someMaterial);
+
+scene.add(someMesh);
+// const cube1 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: "red" })
+// );
 // const cube2 = new THREE.Mesh(
 //   new THREE.BoxGeometry(1, 1, 1),
 //   new THREE.MeshBasicMaterial({ color: "red" })
@@ -35,7 +49,7 @@ const cube1 = new THREE.Mesh(
 
 // const group = new THREE.Group();
 
-scene.add(cube1);
+// scene.add(cube1);
 
 // group.position.set(0, 2, -3);
 
@@ -62,7 +76,7 @@ scene.add(axesHelper);
 window.addEventListener("mousemove", (event) => {
   cursor.x = event.clientX / sizes.width - 0.5;
   cursor.y = event.clientY / sizes.height - 0.5;
-  camera.lookAt(cube1.position);
+  // camera.lookAt(cube1.position);
 });
 
 window.addEventListener("resize", () => {
