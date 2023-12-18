@@ -1,6 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-// import gsap from "gsap";
+import gsap from "gsap";
+
+import GUI from "lil-gui";
+
+const gui = new GUI();
 
 console.log("the device pixel ratio is: ", window.devicePixelRatio);
 
@@ -17,24 +21,24 @@ const sizes = {
 const canvas = document.querySelector(".webgl");
 const scene = new THREE.Scene();
 
-const positionArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);
+// const positionArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);
 
-const positionsAttribute = new THREE.BufferAttribute(positionArray, 3);
+// const positionsAttribute = new THREE.BufferAttribute(positionArray, 3);
 
-const someGeometry = new THREE.BufferGeometry();
-const someMaterial = new THREE.MeshBasicMaterial({
-  color: "red",
-  wireframe: true,
-});
-someGeometry.setAttribute("position", positionsAttribute);
+// const someGeometry = new THREE.BufferGeometry();
+// const someMaterial = new THREE.MeshBasicMaterial({
+//   color: "red",
+//   wireframe: true,
+// });
+// someGeometry.setAttribute("position", positionsAttribute);
 
-const someMesh = new THREE.Mesh(someGeometry, someMaterial);
+// const someMesh = new THREE.Mesh(someGeometry, someMaterial);
 
-scene.add(someMesh);
-// const cube1 = new THREE.Mesh(
-//   new THREE.BoxGeometry(1, 1, 1),
-//   new THREE.MeshBasicMaterial({ color: "red" })
-// );
+// scene.add(someMesh);
+const cube1 = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshBasicMaterial({ color: "red", wireframe: true })
+);
 // const cube2 = new THREE.Mesh(
 //   new THREE.BoxGeometry(1, 1, 1),
 //   new THREE.MeshBasicMaterial({ color: "red" })
@@ -49,7 +53,42 @@ scene.add(someMesh);
 
 // const group = new THREE.Group();
 
-// scene.add(cube1);
+scene.add(cube1);
+
+gui.add(cube1.position, "y", -3, 3, 0.01);
+gui.add(cube1.position, "x", -3, 3, 0.01);
+gui.add(cube1.position, "z", -3, 3, 0.01);
+
+gui.add(cube1.material, "wireframe");
+
+const tempObject = {
+  spin: () => {
+    gsap.to(cube1.rotation, { y: cube1.rotation.y + Math.PI * 2 });
+  },
+  subdivision: 2,
+};
+
+gui.add(tempObject, "spin");
+
+gui
+  .add(tempObject, "subdivision")
+  .min(1)
+  .max(20)
+  .step(1)
+  .onFinishChange(() => {
+    const newGeometry = new THREE.BoxGeometry(
+      1,
+      1,
+      1,
+      tempObject.subdivision,
+      tempObject.subdivision,
+      tempObject.subdivision
+    );
+
+    cube1.geometry.dispose();
+
+    cube1.geometry = newGeometry;
+  });
 
 // group.position.set(0, 2, -3);
 
