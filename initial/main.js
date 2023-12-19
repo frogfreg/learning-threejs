@@ -1,12 +1,29 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import gsap from "gsap";
+import electricImage from "./images/electric.jpg";
+// import gsap from "gsap";
 
-import GUI from "lil-gui";
+// import GUI from "lil-gui";
 
-const gui = new GUI();
+// const gui = new GUI();
 
 console.log("the device pixel ratio is: ", window.devicePixelRatio);
+console.log(electricImage);
+
+const loadingManager = new THREE.LoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager);
+const texture = textureLoader.load(
+  electricImage,
+  () => {
+    console.log("load");
+  },
+  () => {
+    console.log("progress");
+  },
+  () => {
+    console.error("could not load");
+  }
+);
 
 const cursor = {
   x: 0,
@@ -37,7 +54,7 @@ const scene = new THREE.Scene();
 // scene.add(someMesh);
 const cube1 = new THREE.Mesh(
   new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: "red", wireframe: true })
+  new THREE.MeshBasicMaterial({ map: texture })
 );
 // const cube2 = new THREE.Mesh(
 //   new THREE.BoxGeometry(1, 1, 1),
@@ -55,40 +72,40 @@ const cube1 = new THREE.Mesh(
 
 scene.add(cube1);
 
-gui.add(cube1.position, "y", -3, 3, 0.01);
-gui.add(cube1.position, "x", -3, 3, 0.01);
-gui.add(cube1.position, "z", -3, 3, 0.01);
+// gui.add(cube1.position, "y", -3, 3, 0.01);
+// gui.add(cube1.position, "x", -3, 3, 0.01);
+// gui.add(cube1.position, "z", -3, 3, 0.01);
 
-gui.add(cube1.material, "wireframe");
+// gui.add(cube1.material, "wireframe");
 
-const tempObject = {
-  spin: () => {
-    gsap.to(cube1.rotation, { y: cube1.rotation.y + Math.PI * 2 });
-  },
-  subdivision: 2,
-};
+// const tempObject = {
+//   spin: () => {
+//     gsap.to(cube1.rotation, { y: cube1.rotation.y + Math.PI * 2 });
+//   },
+//   subdivision: 2,
+// };
 
-gui.add(tempObject, "spin");
+// gui.add(tempObject, "spin");
 
-gui
-  .add(tempObject, "subdivision")
-  .min(1)
-  .max(20)
-  .step(1)
-  .onFinishChange(() => {
-    const newGeometry = new THREE.BoxGeometry(
-      1,
-      1,
-      1,
-      tempObject.subdivision,
-      tempObject.subdivision,
-      tempObject.subdivision
-    );
+// gui
+//   .add(tempObject, "subdivision")
+//   .min(1)
+//   .max(20)
+//   .step(1)
+//   .onFinishChange(() => {
+//     const newGeometry = new THREE.BoxGeometry(
+//       1,
+//       1,
+//       1,
+//       tempObject.subdivision,
+//       tempObject.subdivision,
+//       tempObject.subdivision
+//     );
 
-    cube1.geometry.dispose();
+//     cube1.geometry.dispose();
 
-    cube1.geometry = newGeometry;
-  });
+//     cube1.geometry = newGeometry;
+//   });
 
 // group.position.set(0, 2, -3);
 
